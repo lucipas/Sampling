@@ -7,9 +7,11 @@
 """
 
 ### LIBRARIES
-import os, sys, struct
-from chunk import Chunk
+import os
+import struct
+import sys
 import wave
+from chunk import Chunk
 
 ### GLOBAL VARIABLES
 # retrieve command line argument
@@ -19,7 +21,7 @@ sf2file = sys.argv[1]
 sfSamples = []
 
 # offset
-sampleDataStart = 0;
+sampleDataStart = 0
 
 ### HELPER FUNCTIONS
 def _read_dword( F ):
@@ -62,8 +64,8 @@ def readSoundfont():
 
   with open(sf2file, 'rb') as F:
     chfile = Chunk(F)
-    riff = chfile.getname()
-    temp = chfile.read(4)
+    chfile.getname()
+    chfile.read(4)
 
     while True:
       try:
@@ -73,12 +75,12 @@ def readSoundfont():
 
       name = chunk.getname()
       if name == b'LIST':
-        listname = chfile.read(4)
+        chfile.read(4)
       elif name == b'smpl':
-        sampleDataStart = chfile.tell() + 8
+        chfile.tell() + 8
         chunk.skip()
       elif name == b'shdr':
-        for i in range( int(chunk.chunksize/46) - 1 ):
+        for _i in range( int(chunk.chunksize/46) - 1 ):
           s = sfSample(chfile)
           sfSamples.append(s)
         chfile.read(46)
@@ -124,7 +126,7 @@ def writeWaves(folderName):
       else:
         G.setnchannels(2)
         F2.seek( sampleDataStart + 2*sfSamples[ s.link ].start )
-        for i in range(frames):
+        for _i in range(frames):
           data = F.read(2)
           G.writeframesraw(data)
           data = F2.read(2)
@@ -177,5 +179,6 @@ def main():
   readSoundfont()
   folderName = newFolder()
   writeWaves(folderName)
+  os.remove(sf2file)
 
 main()
