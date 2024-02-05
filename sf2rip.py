@@ -180,5 +180,4 @@ def main():
   folderName = newFolder()
   writeWaves(folderName)
   os.remove(sf2file)
-os.system("clear")
 main()
